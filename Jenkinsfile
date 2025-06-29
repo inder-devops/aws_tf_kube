@@ -2,7 +2,10 @@ pipeline {
 
     parameters {
         booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
-    } 
+    }
+    tools {
+        terraform 'terraform11'
+    }
     environment {
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
@@ -15,7 +18,7 @@ pipeline {
                  script{
                         dir("terraform")
                         {
-                            git "https://github.com/inder-devops/aws_tf_kube.git"
+                            git branch: 'main', url: 'https://github.com/inder-devops/aws_tf_kube.git'
                         }
                     }
                 }
@@ -50,5 +53,4 @@ pipeline {
             }
         }
     }
-
   }
