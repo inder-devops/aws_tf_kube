@@ -61,7 +61,7 @@ pipeline {
                 expression { return params.ACTION == 'destroy' }
             }
             steps {
-                sh "pwd;cd terraform/ ; terraform destroy"
+                sh "pwd;cd terraform/ ; terraform destroy --auto-approve"
             }
         }
     }
