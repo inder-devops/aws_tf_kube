@@ -2,6 +2,7 @@ pipeline {
 
     parameters {
         booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
+        choice(name: 'ACTION', choices: ['apply', 'destroy'], description: 'Select whether to apply or destroy the Terraform configuration')
     }
     tools {
         terraform 'terraform11'
@@ -47,9 +48,15 @@ pipeline {
            }
        }
 
-        stage('Apply') {
+        stage('Apply/Destroy') {
+            when {
+                anyOf {
+                    equals expected: true, actual: params.autoApprove
+                    input message: 'Do you want to apply or destroy the plan?'
+                }
+            }
             steps {
-                sh "pwd;cd terraform/ ; terraform apply -input=false tfplan"
+                sh "pwd;cd terraform/ ; terraform ${params.ACTION} -input=false tfplan"
             }
         }
     }
