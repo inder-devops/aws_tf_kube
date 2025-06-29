@@ -2,11 +2,8 @@ pipeline {
 
     parameters {
         booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
-        choice(name: 'ACTION', choices: ['apply', 'destroy'], description: 'Select whether to apply or destroy the Terraform configuration')
-    }
-    tools {
-        terraform 'terraform11'
-    }
+        choice(name: 'ACTION', choices: ['apply', 'destroy'], description: 'Apply or Destroy the Infra?')
+    } 
     environment {
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
@@ -19,7 +16,7 @@ pipeline {
                  script{
                         dir("terraform")
                         {
-                            git branch: 'main', url: 'https://github.com/inder-devops/aws_tf_kube.git'
+                            git "https://github.com/inder-devops/aws_tf_kube.git"
                         }
                     }
                 }
@@ -48,16 +45,11 @@ pipeline {
            }
        }
 
-        stage('Apply/Destroy') {
-            when {
-                anyOf {
-                    equals expected: true, actual: params.autoApprove
-                    input message: 'Do you want to apply or destroy the plan?'
-                }
-            }
+        stage('Apply') {
             steps {
                 sh "pwd;cd terraform/ ; terraform ${params.ACTION} -input=false tfplan"
             }
         }
     }
+
   }
