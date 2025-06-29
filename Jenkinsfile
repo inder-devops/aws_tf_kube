@@ -49,10 +49,20 @@ pipeline {
        }
 
         stage('Apply') {
+            when {
+                expression { return params.ACTION == 'apply' }
+            }
             steps {
-                sh "pwd;cd terraform/ ; terraform ${params.ACTION} -input=false tfplan"
+                sh "pwd;cd terraform/ ; terraform apply -input=false tfplan"
+            }
+        }
+        stage('Destroy') {
+            when {
+                expression { return params.ACTION == 'destroy' }
+            }
+            steps {
+                sh "pwd;cd terraform/ ; terraform destroy -input=false tfplan"
             }
         }
     }
-
   }
