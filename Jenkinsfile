@@ -19,7 +19,7 @@ pipeline {
                  script{
                         dir("terraform")
                         {
-                            git branch: 'main', url: 'https://github.com/inder-devops/aws_tf_kube.git'
+                            git branch: 'dev', url: 'https://github.com/inder-devops/aws_tf_kube.git'
                         }
                     }
                 }
