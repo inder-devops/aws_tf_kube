@@ -3,7 +3,7 @@ resource "aws_eip" "nat_IP" {
     vpc = true
 }
 
-resource "" "name" {
+resource "aws_nat_gateway" "my_nat_gateway" { {
   count = length(var.cidr_private_subnets)
   depends_on = [aws_eip.nat_IP]
   allocation_id = aws_eip.nat_IP[count.index].id
