@@ -1,3 +1,4 @@
+#Test change
 resource "aws_route_table_association" "public_subnet_association"{
     count = length(var.cidr_public_subnets)
     depends_on = [ aws_subnet.my_project_public_subnet, aws_route_table.my_public_route_table ]
